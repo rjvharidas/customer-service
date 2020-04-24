@@ -36,7 +36,7 @@ public class CustomerController {
     }
 
     @PutMapping(path = "/", consumes = "application/json", produces = "application/json")
-    public Object updateCustomer(@Valid @RequestBody Customer customer) {
+    public Success updateCustomer(@Valid @RequestBody Customer customer) {
         Optional<Customer> oldCustomer = customerRepository.findById(customer.getId());
         if (!oldCustomer.isPresent()) {
             throw new CustomerNotFoundException(CUSTOMER_NOT_FOUND);
@@ -55,7 +55,7 @@ public class CustomerController {
     }
 
     @DeleteMapping(path = "/{customerId}", produces = "application/json")
-    public Object removeCustomerById(@PathVariable("customerId") String customerId) {
+    public Success removeCustomerById(@PathVariable("customerId") String customerId) {
         Optional<Customer> customer = customerRepository.findById(customerId);
         if (!customer.isPresent()) {
             throw new CustomerNotFoundException(CUSTOMER_NOT_FOUND);
