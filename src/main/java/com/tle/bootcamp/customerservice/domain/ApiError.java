@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Error {
+public class ApiError {
     private @NotNull String errorCode;
     private @NotNull String description;
 }
