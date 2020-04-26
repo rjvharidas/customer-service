@@ -45,7 +45,7 @@ class CustomerControllerTest extends CustomerServiceApplicationTests {
     @Test
     @WithMockUser(username = "test", password = "test")
     void updateCustomer() throws Exception {
-        Mockito.when(customerRepository.findById("10")).thenReturn(Optional.of(mockCustomer()));
+        Mockito.when(customerRepository.findById("11")).thenReturn(Optional.of(mockCustomer()));
         mockMvc.perform(put("/customer/").content(asJsonString(mockUpdateCustomer()))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -56,13 +56,13 @@ class CustomerControllerTest extends CustomerServiceApplicationTests {
     @Test
     @WithMockUser(username = "test", password = "test")
     void getCustomerById() throws Exception {
-        Mockito.when(customerRepository.findById("10")).thenReturn(Optional.of(mockUpdateCustomer()));
-        mockMvc.perform(get("/customer/{id}", "10")
+        Mockito.when(customerRepository.findById("12")).thenReturn(Optional.of(mockUpdateCustomer()));
+        mockMvc.perform(get("/customer/{id}", "12")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.id").value("10"))
+                .andExpect(jsonPath("$.id").value("11"))
                 .andExpect(jsonPath("$.city").value("Bangalore"))
                 .andExpect(jsonPath("$.state").value("Karnataka"));
     }
@@ -70,8 +70,8 @@ class CustomerControllerTest extends CustomerServiceApplicationTests {
     @Test
     @WithMockUser(username = "test", password = "test")
     void removeCustomerById() throws Exception {
-        Mockito.when(customerRepository.findById("10")).thenReturn(Optional.of(mockUpdateCustomer()));
-        mockMvc.perform(delete("/customer/{id}", "10"))
+        Mockito.when(customerRepository.findById("11")).thenReturn(Optional.of(mockUpdateCustomer()));
+        mockMvc.perform(delete("/customer/{id}", "11"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.message").value("Customer deleted successfully!!!!"));
@@ -80,20 +80,20 @@ class CustomerControllerTest extends CustomerServiceApplicationTests {
     @Test
     @WithMockUser(username = "test", password = "test")
     void processError() throws Exception {
-        Mockito.when(customerRepository.findById("10")).thenReturn(Optional.empty());
-        mockMvc.perform(get("/customer/{id}", "10"))
+        Mockito.when(customerRepository.findById("13")).thenReturn(Optional.empty());
+        mockMvc.perform(get("/customer/{id}", "13"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.message").value("Customer Id not found..!!"));
     }
 
     private Customer mockCustomer() {
-        return new Customer("10", "rajeev", "haridas", "kochi", "Kerala",
+        return new Customer("11", "rajeev", "haridas", "kochi", "Kerala",
                 "raj@yahoo.in", "0467882546");
     }
 
     private Customer mockUpdateCustomer() {
-        return new Customer("10", "rajeev", "haridas", "Bangalore", "Karnataka",
+        return new Customer("11", "rajeev", "haridas", "Bangalore", "Karnataka",
                 "raj@yahoo.in", "0467882546");
     }
 
