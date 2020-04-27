@@ -1,6 +1,5 @@
 package com.tle.bootcamp.customerservice.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;

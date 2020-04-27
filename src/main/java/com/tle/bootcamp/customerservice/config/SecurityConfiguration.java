@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static com.tle.bootcamp.customerservice.constants.CustomerConstant.AUTH_WHITELIST;
+
 @Configuration
 @EnableConfigurationProperties
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -20,13 +22,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable().authorizeRequests()
-//                .antMatchers("/customer/*").permitAll()
-//                .antMatchers("/**").authenticated().and().httpBasic();
         http.csrf()
                 .disable()
                 .authorizeRequests()
-                .anyRequest()
+                .antMatchers(AUTH_WHITELIST).permitAll().anyRequest()
                 .authenticated()
                 .and().httpBasic()
                 .and().sessionManagement()

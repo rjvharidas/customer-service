@@ -2,6 +2,7 @@ package com.tle.bootcamp.customerservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tle.bootcamp.customerservice.CustomerServiceApplicationTests;
+import com.tle.bootcamp.customerservice.constants.ErrorCode;
 import com.tle.bootcamp.customerservice.domain.Customer;
 import com.tle.bootcamp.customerservice.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
+import static com.tle.bootcamp.customerservice.constants.CustomerConstant.CUSTOMER_ADDED;
+import static com.tle.bootcamp.customerservice.constants.CustomerConstant.CUSTOMER_DELETED;
+import static com.tle.bootcamp.customerservice.constants.CustomerConstant.CUSTOMER_UPDATED;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -39,7 +43,7 @@ class CustomerControllerTest extends CustomerServiceApplicationTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.message").value("Customer added successfully!!!!"));
+                .andExpect(jsonPath("$.message").value(CUSTOMER_ADDED));
     }
 
     @Test
@@ -50,19 +54,19 @@ class CustomerControllerTest extends CustomerServiceApplicationTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.message").value("Customer updated successfully!!!!"));
+                .andExpect(jsonPath("$.message").value(CUSTOMER_UPDATED));
     }
 
     @Test
     @WithMockUser(username = "test", password = "test")
     void getCustomerById() throws Exception {
-        Mockito.when(customerRepository.findById("12")).thenReturn(Optional.of(mockUpdateCustomer()));
-        mockMvc.perform(get("/customer/{id}", "12")
+        Mockito.when(customerRepository.findById(Mockito.anyString())).thenReturn(Optional.of(mockUpdateCustomer()));
+        mockMvc.perform(get("/customer/{id}", "13")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.id").value("11"))
+                .andExpect(jsonPath("$.id").value("13"))
                 .andExpect(jsonPath("$.city").value("Bangalore"))
                 .andExpect(jsonPath("$.state").value("Karnataka"));
     }
@@ -74,17 +78,17 @@ class CustomerControllerTest extends CustomerServiceApplicationTests {
         mockMvc.perform(delete("/customer/{id}", "11"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.message").value("Customer deleted successfully!!!!"));
+                .andExpect(jsonPath("$.message").value(CUSTOMER_DELETED));
     }
 
     @Test
     @WithMockUser(username = "test", password = "test")
     void processError() throws Exception {
-        Mockito.when(customerRepository.findById("13")).thenReturn(Optional.empty());
-        mockMvc.perform(get("/customer/{id}", "13"))
+        Mockito.when(customerRepository.findById("14")).thenReturn(Optional.empty());
+        mockMvc.perform(get("/customer/{id}", "14"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.message").value("Customer Id not found..!!"));
+                .andExpect(jsonPath("$.message").value(ErrorCode.CUSTOMER_NOT_FOUND));
     }
 
     private Customer mockCustomer() {
